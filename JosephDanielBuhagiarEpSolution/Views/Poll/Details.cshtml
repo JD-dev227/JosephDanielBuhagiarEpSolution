@@ -1,0 +1,55 @@
+﻿@model Domain.Poll
+@{
+    ViewBag.Title = "Poll Details";
+}
+<h1>@Model.Title</h1>
+
+<!-- Display poll options and their vote counts -->
+<ul>
+    <li>Option 1: @Model.Option1Text - Votes: @Model.Option1VotesCount</li>
+    <li>Option 2: @Model.Option2Text - Votes: @Model.Option2VotesCount</li>
+    <li>Option 3: @Model.Option3Text - Votes: @Model.Option3VotesCount</li>
+</ul>
+
+<!-- Voting Form -->
+<form asp-action="Vote" method="post">
+    <input type="hidden" name="pollId" value="@Model.Id" />
+    <div>
+        <label>Select an Option:</label>
+        <select name="optionNumber">
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+        </select>
+    </div>
+    <button type="submit">Vote</button>
+</form>
+
+<!-- Chart.js integration -->
+
+<h2>Poll Results</h2>
+<canvas id="pollChart" width="400" height="200"></canvas>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('pollChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['@Model.Option1Text', '@Model.Option2Text', '@Model.Option3Text'],
+                datasets: [{
+                    label: 'Votes Count',
+                    data: [@Model.Option1VotesCount, @Model.Option2VotesCount, @Model.Option3VotesCount]
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+    </script>>
+}

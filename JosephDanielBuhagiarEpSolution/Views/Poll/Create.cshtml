@@ -1,0 +1,24 @@
+﻿@model Domain.Poll
+@{
+    ViewBag.Title = "Create Poll";
+}
+<h1>Create a New Poll</h1>
+<form asp-action="Create" method="post">
+    <div>
+        <label>Title:</label>
+        <input asp-for="Title" />
+    </div>
+    <div>
+        <label>Option 1:</label>
+        <input asp-for="Option1Text" />
+    </div>
+    <div>
+        <label>Option 2:</label>
+        <input asp-for="Option2Text" />
+    </div>
+    <div>
+        <label>Option 3:</label>
+        <input asp-for="Option3Text" />
+    </div>
+    <button type="submit">Create Poll</button>
+</form>

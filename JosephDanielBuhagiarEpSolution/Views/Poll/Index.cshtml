@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Domain.Poll>
+@{
+    ViewBag.Title = "All Polls";
+}
+<h1>All Polls</h1>
+<ul>
+    @foreach (var poll in Model)
+    {
+        <li>
+            <a href="@Url.Action("Details", "Poll", new { id = poll.Id })">@poll.Title</a> (Created on: @poll.DateCreated)
+        </li>
+    }
+</ul>
+<a href="@Url.Action("Create", "Poll")">Create a New Poll</a>

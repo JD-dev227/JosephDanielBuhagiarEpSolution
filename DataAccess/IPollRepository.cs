@@ -17,7 +17,8 @@ namespace DataAccess
         IEnumerable<Poll> GetPolls();
 
         // Updates the poll with a vote for the specified option.
-        void Vote(int pollId, int optionNumber);
-
+        //void Vote(int pollId, int optionNumber);
+        // Asynchronously updates the poll with a vote for the specified option.
+        Task<bool> VoteAsync(int pollId, int optionNumber, string userId);
     }
 }

@@ -2,23 +2,40 @@
 @{
     ViewBag.Title = "Create Poll";
 }
-<h1>Create a New Poll</h1>
-<form asp-action="Create" method="post">
-    <div>
-        <label>Title:</label>
-        <input asp-for="Title" />
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Create a New Poll</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label"></label>
+                            <input asp-for="Title" class="form-control" placeholder="Enter poll title" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Option1Text" class="form-label"></label>
+                            <input asp-for="Option1Text" class="form-control" placeholder="Option 1" />
+                            <span asp-validation-for="Option1Text" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Option2Text" class="form-label"></label>
+                            <input asp-for="Option2Text" class="form-control" placeholder="Option 2" />
+                            <span asp-validation-for="Option2Text" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Option3Text" class="form-label"></label>
+                            <input asp-for="Option3Text" class="form-control" placeholder="Option 3" />
+                            <span asp-validation-for="Option3Text" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Poll</button>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <label>Option 1:</label>
-        <input asp-for="Option1Text" />
-    </div>
-    <div>
-        <label>Option 2:</label>
-        <input asp-for="Option2Text" />
-    </div>
-    <div>
-        <label>Option 3:</label>
-        <input asp-for="Option3Text" />
-    </div>
-    <button type="submit">Create Poll</button>
-</form>
+</div>

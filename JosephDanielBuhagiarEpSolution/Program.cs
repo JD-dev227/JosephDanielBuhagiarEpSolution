@@ -1,5 +1,5 @@
 using DataAccess;
-using JosephDanielBuhagiarEpSolution.Data; // Contains ApplicationDbContext, PollDbContext, IPollRepository, PollRepository
+using JosephDanielBuhagiarEpSolution.Data; 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +15,6 @@ namespace JosephDanielBuhagiarEpSolution
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            // Register the Identity DbContext.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();

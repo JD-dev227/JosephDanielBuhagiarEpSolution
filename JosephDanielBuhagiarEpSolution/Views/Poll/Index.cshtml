@@ -2,13 +2,24 @@
 @{
     ViewBag.Title = "All Polls";
 }
-<h1>All Polls</h1>
-<ul>
-    @foreach (var poll in Model)
-    {
-        <li>
-            <a href="@Url.Action("Details", "Poll", new { id = poll.Id })">@poll.Title</a> (Created on: @poll.DateCreated)
-        </li>
-    }
-</ul>
-<a href="@Url.Action("Create", "Poll")">Create a New Poll</a>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">All Polls</h1>
+            <div class="list-group">
+                @foreach (var poll in Model)
+                {
+                    <a href="@Url.Action("Details", "Poll", new { id = poll.Id })" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">@poll.Title</h5>
+                            <small>@poll.DateCreated.ToString("MM/dd/yyyy")</small>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="mt-4">
+                <a href="@Url.Action("Create", "Poll")" class="btn btn-primary">Create a New Poll</a>
+            </div>
+        </div>
+    </div>
+</div>

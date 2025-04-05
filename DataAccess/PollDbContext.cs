@@ -10,11 +10,12 @@ namespace DataAccess
         }
 
         public DbSet<Poll> Polls { get; set; }
+        public DbSet<PollVote> PollVotes { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Additional configuration if needed.
+            
         }
     }
 }

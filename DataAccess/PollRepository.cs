@@ -33,6 +33,7 @@ namespace DataAccess
         }
 
         // Updates the vote count for the chosen option.
+        /*
         public void Vote(int pollId, int optionNumber)
         {
             // Find the poll by its Id.
@@ -56,6 +57,54 @@ namespace DataAccess
                 }
                 _context.SaveChanges();  // Persist changes.
             }
+        
+        }
+        */
+        public async Task<bool> VoteAsync(int pollId, int optionNumber, string userId)
+        {
+            // Check if the user has already voted for this poll.
+            var existingVote = await _context.PollVotes
+                .FirstOrDefaultAsync(v => v.PollId == pollId && v.UserId == userId);
+
+            if (existingVote != null)
+            {
+                // The user has already voted.
+                return false;
+            }
+
+            // Record the vote.
+            var poll = await _context.Polls.FindAsync(pollId);
+            if (poll == null)
+            {
+                throw new InvalidOperationException("Poll not found.");
+            }
+
+            switch (optionNumber)
+            {
+                case 1:
+                    poll.Option1VotesCount++;
+                    break;
+                case 2:
+                    poll.Option2VotesCount++;
+                    break;
+                case 3:
+                    poll.Option3VotesCount++;
+                    break;
+                default:
+                    throw new ArgumentException("Invalid option number.");
+            }
+
+            // Create a record of the vote.
+            var pollVote = new PollVote
+            {
+                PollId = pollId,
+                UserId = userId,
+                OptionNumber = optionNumber
+            };
+
+            _context.PollVotes.Add(pollVote);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

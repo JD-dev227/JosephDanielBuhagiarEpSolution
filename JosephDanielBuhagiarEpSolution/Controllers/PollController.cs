@@ -7,7 +7,7 @@ using JosephDanielBuhagiarEpSolution.Models;
 
 namespace Presentation.Controllers
 {
-    // Controller to manage poll operations (create, list, details, vote).
+    
     public class PollController : Controller
     {
         private readonly IPollRepository _pollRepository;
@@ -56,11 +56,31 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [VoteRestrictionFilter]
-        public IActionResult Vote(int pollId, int optionNumber)
+        /* public IActionResult Vote(int pollId, int optionNumber)
+         {
+             _pollRepository.Vote(pollId, optionNumber);
+             // Set session key so the user cannot vote again on this poll.
+             HttpContext.Session.SetString($"Voted_{pollId}", "true");
+             return RedirectToAction("Details", new { id = pollId });
+         }
+        */
+
+        [HttpPost]
+        [VoteRestrictionFilter]
+        public async Task<IActionResult> Vote(int pollId, int optionNumber)
         {
-            _pollRepository.Vote(pollId, optionNumber);
-            // Set session key so the user cannot vote again on this poll.
-            HttpContext.Session.SetString($"Voted_{pollId}", "true");
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var success = await _pollRepository.VoteAsync(pollId, optionNumber, userId);
+            if (!success)
+            {
+                // Optionally display an error message that the user has already voted.
+                TempData["Error"] = "You have already voted in this poll.";
+            }
             return RedirectToAction("Details", new { id = pollId });
         }
 

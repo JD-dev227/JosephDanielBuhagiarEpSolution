@@ -2,33 +2,58 @@
 @{
     ViewBag.Title = "Poll Details";
 }
-<h1>@Model.Title</h1>
 
-<!-- Display poll options and their vote counts -->
-<ul>
-    <li>Option 1: @Model.Option1Text - Votes: @Model.Option1VotesCount</li>
-    <li>Option 2: @Model.Option2Text - Votes: @Model.Option2VotesCount</li>
-    <li>Option 3: @Model.Option3Text - Votes: @Model.Option3VotesCount</li>
-</ul>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <!-- Poll Card -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h3 class="mb-0">@Model.Title</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Options and Votes List -->
+                    <h5>Options and Votes</h5>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Model.Option1Text
+                            <span class="badge bg-primary rounded-pill">@Model.Option1VotesCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Model.Option2Text
+                            <span class="badge bg-primary rounded-pill">@Model.Option2VotesCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Model.Option3Text
+                            <span class="badge bg-primary rounded-pill">@Model.Option3VotesCount</span>
+                        </li>
+                    </ul>
 
-<!-- Voting Form -->
-<form asp-action="Vote" method="post">
-    <input type="hidden" name="pollId" value="@Model.Id" />
-    <div>
-        <label>Select an Option:</label>
-        <select name="optionNumber">
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-        </select>
+                    <!-- Voting Form -->
+                    <h5>Vote</h5>
+                    <form asp-action="Vote" method="post">
+                        <input type="hidden" name="pollId" value="@Model.Id" />
+                        <div class="mb-3">
+                            <label for="optionNumber" class="form-label">Select an Option:</label>
+                            <select name="optionNumber" id="optionNumber" class="form-select">
+                                <option value="1">@Model.Option1Text</option>
+                                <option value="2">@Model.Option2Text</option>
+                                <option value="3">@Model.Option3Text</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Vote</button>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <!-- Chart Section -->
+                    <h5>Poll Results</h5>
+                    <canvas id="pollChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
-    <button type="submit">Vote</button>
-</form>
+</div>
 
-<!-- Chart.js integration -->
-
-<h2>Poll Results</h2>
-<canvas id="pollChart" width="400" height="200"></canvas>
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -39,7 +64,18 @@
                 labels: ['@Model.Option1Text', '@Model.Option2Text', '@Model.Option3Text'],
                 datasets: [{
                     label: 'Votes Count',
-                    data: [@Model.Option1VotesCount, @Model.Option2VotesCount, @Model.Option3VotesCount]
+                    data: [@Model.Option1VotesCount, @Model.Option2VotesCount, @Model.Option3VotesCount],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
                 }]
             },
             options: {
@@ -51,5 +87,5 @@
                 }
             }
         });
-    </script>>
+    </script>
 }

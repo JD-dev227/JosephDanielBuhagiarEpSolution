@@ -46,7 +46,7 @@ namespace DataAccess
             // Return polls sorted by DateCreated (most recent first)
             return polls.OrderByDescending(p => p.DateCreated).ToList();
         }
-
+        /*
         public void Vote(int pollId, int optionNumber)
         {
             var polls = LoadPolls();
@@ -69,6 +69,53 @@ namespace DataAccess
                 }
                 SavePolls(polls);
             }
+        }
+        */
+
+        // Asynchronous Vote method implementation.
+        public async Task<bool> VoteAsync(int pollId, int optionNumber, string userId)
+        {
+            // Load polls from file asynchronously.
+            List<Poll> polls;
+            if (!File.Exists(_filePath))
+            {
+                polls = new List<Poll>();
+            }
+            else
+            {
+                var json = await File.ReadAllTextAsync(_filePath);
+                polls = JsonSerializer.Deserialize<List<Poll>>(json) ?? new List<Poll>();
+            }
+
+            var poll = polls.FirstOrDefault(p => p.Id == pollId);
+            if (poll == null)
+            {
+                throw new InvalidOperationException("Poll not found.");
+            }
+
+            // Increase vote count for the specified option.
+            switch (optionNumber)
+            {
+                case 1:
+                    poll.Option1VotesCount++;
+                    break;
+                case 2:
+                    poll.Option2VotesCount++;
+                    break;
+                case 3:
+                    poll.Option3VotesCount++;
+                    break;
+                default:
+                    throw new ArgumentException("Invalid option number.");
+            }
+
+            // Save the updated polls list back to the file asynchronously.
+            var updatedJson = JsonSerializer.Serialize(polls, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(_filePath, updatedJson);
+
+            // For file repository, we are not tracking user votes persistently.
+            // Therefore, always return true.
+            return true;
         }
     }
 }
